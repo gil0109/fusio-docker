@@ -34,10 +34,20 @@ ENV COMPOSER_SHA1 "6dc307027b69892191dca036dcc64bb02dd74ab2"
 
 # install default packages
 RUN apt-get update -y
+
+
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install wget git unzip apache2 memcached libapache2-mod-php7.2 php7.2 mysql-client
 
 # install php7 extensions
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.2-mysql php7.2-pgsql php7.2-sqlite3 php7.2-simplexml php7.2-dom php7.2-bcmath php7.2-curl php7.2-zip php7.2-mbstring php7.2-intl php7.2-xml php7.2-curl php7.2-gd php7.2-soap php-memcached php-mongodb
+
+# install mysql drivers
+
+RUN pecl install sqlsrv & \
+    pecl install pdo_sqlsrv & \
+    printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini & \
+    printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.3/mods-available/pdo_sqlsrv.ini & \
+    phpenmod -v 7.3 sqlsrv pdo_sqlsrv 
 
 # install composer
 RUN wget -O /usr/bin/composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
