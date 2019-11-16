@@ -82,7 +82,7 @@ return [
 
     // The url to the psx public folder (i.e. http://127.0.0.1/psx/public or 
     // http://localhost.com)
-    'psx_url'                 => 'http://' . getenv('FUSIO_HOST'),
+    'psx_url'                 => 'https://' . getenv('FUSIO_HOST'),
     'psx_dispatch'            => '',
 
     // The default timezone
@@ -99,7 +99,7 @@ return [
         'user'                => getenv('FUSIO_DB_USER'),
         'password'            => getenv('FUSIO_DB_PW'),
         'host'                => getenv('FUSIO_DB_HOST'),
-        'driver'              => 'pdo_mysql',
+        'driver'              => getenv('FUSIO_DB_TYPE'),
     ],
 
     // Folder locations
