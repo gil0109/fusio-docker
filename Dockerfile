@@ -46,8 +46,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.2-mysql php7.2-pgsql 
 RUN pecl install sqlsrv & \
     pecl install pdo_sqlsrv & \
     printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini & \
-    printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.3/mods-available/pdo_sqlsrv.ini & \
-    phpenmod -v 7.3 sqlsrv pdo_sqlsrv 
+    printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.2/mods-available/pdo_sqlsrv.ini & \
+    phpenmod -v 7.2 sqlsrv pdo_sqlsrv 
 
 # install composer
 RUN wget -O /usr/bin/composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
