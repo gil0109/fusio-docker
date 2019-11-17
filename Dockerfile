@@ -47,7 +47,8 @@ RUN pecl install sqlsrv & \
     pecl install pdo_sqlsrv & \
     printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini & \
     printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.2/mods-available/pdo_sqlsrv.ini & \
-    phpenmod -v 7.2 sqlsrv pdo_sqlsrv 
+    phpenmod -v 7.2 sqlsrv pdo_sqlsrv  & \
+    sed -i "\$aextension=pdo_sqlsrv.so" /etc/php/7.2/mods-available/pdo.ini
 
 # install composer
 RUN wget -O /usr/bin/composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
@@ -101,7 +102,6 @@ RUN cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-soap
 RUN a2enmod rewrite
 RUN a2dissite 000-default
 RUN a2ensite 000-fusio
-RUN sed -i "\$aextension=pdo_sqlsrv.so" pdo.ini
 
 # install cron
 RUN touch /etc/cron.d/fusio
