@@ -39,17 +39,18 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.2-mysql php7.2-pgsql 
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
 RUN echo "deb [arch=amd64] https://packages.microsoft.com/ubuntu/18.04/prod bionic main" | tee /etc/apt/sources.list.d/mssql-release.list 
 RUN apt-get update
-RUN ACCEPT_EULA=Y apt-get -y install msodbcsql17 unixodbc-dev
-RUN pecl install sqlsrv
-RUN pecl install pdo_sqlsrv
-RUN printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini && \
+RUN ACCEPT_EULA=Y apt-get -y install msodbcsql17 unixodbc-dev && \
+    chmod 777 /etc/odbc.ini
+RUN pecl install sqlsrv && \
+    pecl install pdo_sqlsrv && \
+    printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini && \
     printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.2/mods-available/pdo_sqlsrv.ini && \
-    cp /etc/php/7.2/mods-available/sqlsrv.ini /etc/php/7.2/cli/conf.d/10-sqlsrv.ini && \
-    cp /etc/php/7.2/mods-available/pdo_sqlsrv.ini /etc/php/7.2/cli/conf.d/20-pdo_sqlsrv.ini
-#    sed -i "\$aextension=sqlsrv.so" /etc/php/7.2/mods-available/pdo.ini && \
-#    sed -i "\$aextension=pdo_sqlsrv.so" /etc/php/7.2/mods-available/pdo.ini && \
-#    cp  /etc/php/7.2/mods-available/pdo.ini /usr/share/php7.2-common/common/pdo.ini
-RUN phpenmod sqlsrv pdo_sqlsrv 
+    #   cp /etc/php/7.2/mods-available/sqlsrv.ini /etc/php/7.2/cli/conf.d/10-sqlsrv.ini && \
+    #   cp /etc/php/7.2/mods-available/pdo_sqlsrv.ini /etc/php/7.2/cli/conf.d/20-pdo_sqlsrv.ini
+    #    sed -i "\$aextension=sqlsrv.so" /etc/php/7.2/mods-available/pdo.ini && \
+    #    sed -i "\$aextension=pdo_sqlsrv.so" /etc/php/7.2/mods-available/pdo.ini && \
+    #    cp  /etc/php/7.2/mods-available/pdo.ini /usr/share/php7.2-common/common/pdo.ini
+    phpenmod sqlsrv pdo_sqlsrv 
 
 # install composer
 RUN wget -O /usr/bin/composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar && \
