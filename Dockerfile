@@ -43,9 +43,12 @@ RUN ACCEPT_EULA=Y apt-get -y install msodbcsql17 unixodbc-dev
 RUN pecl install sqlsrv
 RUN pecl install pdo_sqlsrv
 RUN printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini & \
-    printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.2/mods-available/pdo_sqlsrv.ini
-RUN phpenmod sqlsrv pdo_sqlsrv  & \
-    sed -i "\$aextension=pdo_sqlsrv.so" /etc/php/7.2/mods-available/pdo.ini
+    printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.2/mods-available/pdo_sqlsrv.ini & \
+    cp /etc/php/7.2/mods-available/sqlsrv.ini /etc/php/7.2/cli/conf.d/10-sqlsrv.ini & \
+    cp /etc/php/7.2/mods-available/pdo_sqlsrv.ini /etc/php/7.2/cli/conf.d/20-pdo_sqlsrv.ini & \
+    sed -i "\$aextension=pdo_sqlsrv.so" /etc/php/7.2/mods-available/pdo.ini & \
+    cp  /etc/php/7.2/mods-available/pdo.ini /usr/share/php7.2-common/common/pdo.ini
+RUN phpenmod sqlsrv pdo_sqlsrv 
 
 # install composer
 RUN wget -O /usr/bin/composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
