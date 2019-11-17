@@ -37,7 +37,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.2-mysql php7.2-pgsql 
 
 # install mysql drivers
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
-RUN echo "deb [arch=amd64] https://packages.microsoft.com/ubuntu/18.04/prod bionic main" | sudo tee /etc/apt/sources.list.d/mssql-release.list 
+RUN echo "deb [arch=amd64] https://packages.microsoft.com/ubuntu/18.04/prod bionic main" | tee /etc/apt/sources.list.d/mssql-release.list 
 RUN apt-get update
 RUN ACCEPT_EULA=Y apt-get install msodbcsql17 
 RUN pecl install sqlsrv
