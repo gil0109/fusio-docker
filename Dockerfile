@@ -36,10 +36,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install curl wget git unzip apache
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.2-mysql php7.2-pgsql php7.2-sqlite3 php7.2-simplexml php7.2-dom php7.2-bcmath php7.2-curl php7.2-zip php7.2-mbstring php7.2-intl php7.2-xml php7.2-curl php7.2-gd php7.2-soap php-memcached php-mongodb
 
 # install mysql drivers
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - & \
-    curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list > /etc/apt/sources.list.d/mssql-release.list 
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - 
+RUN echo "deb [arch=amd64] https://packages.microsoft.com/ubuntu/18.04/prod bionic main" | sudo tee /etc/apt/sources.list.d/mssql-release.list 
 RUN apt-get update
-RUN ACCEPT_EULA=Y apt-get install msodbcsql17
+RUN ACCEPT_EULA=Y apt-get install msodbcsql17 
 RUN pecl install sqlsrv
 RUN pecl install pdo_sqlsrv
 RUN printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini & \
