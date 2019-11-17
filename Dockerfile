@@ -45,16 +45,16 @@ RUN pecl install pdo_sqlsrv
 RUN printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini & \
     printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.2/mods-available/pdo_sqlsrv.ini & \
     cp /etc/php/7.2/mods-available/sqlsrv.ini /etc/php/7.2/cli/conf.d/10-sqlsrv.ini & \
-    cp /etc/php/7.2/mods-available/pdo_sqlsrv.ini /etc/php/7.2/cli/conf.d/20-pdo_sqlsrv.ini & \
-    sed -i "\$aextension=sqlsrv.so" /etc/php/7.2/mods-available/pdo.ini & \
-    sed -i "\$aextension=pdo_sqlsrv.so" /etc/php/7.2/mods-available/pdo.ini & \
-    cp  /etc/php/7.2/mods-available/pdo.ini /usr/share/php7.2-common/common/pdo.ini
+    cp /etc/php/7.2/mods-available/pdo_sqlsrv.ini /etc/php/7.2/cli/conf.d/20-pdo_sqlsrv.ini
+#    sed -i "\$aextension=sqlsrv.so" /etc/php/7.2/mods-available/pdo.ini & \
+#    sed -i "\$aextension=pdo_sqlsrv.so" /etc/php/7.2/mods-available/pdo.ini & \
+#    cp  /etc/php/7.2/mods-available/pdo.ini /usr/share/php7.2-common/common/pdo.ini
 RUN phpenmod sqlsrv pdo_sqlsrv 
 
 # install composer
 RUN wget -O /usr/bin/composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar & \
-    echo "${COMPOSER_SHA1} */usr/bin/composer" | sha1sum -c - & \
-    chmod +x /usr/bin/composer
+    echo "${COMPOSER_SHA1} */usr/bin/composer" | sha1sum -c - 
+RUN chmod +x /usr/bin/composer
 
 # install fusio
 RUN wget -O /var/www/html/fusio.zip "https://github.com/apioo/fusio/archive/${FUSIO_VERSION}.zip" & \
