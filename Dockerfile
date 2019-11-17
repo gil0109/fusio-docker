@@ -42,24 +42,24 @@ RUN apt-get update
 RUN ACCEPT_EULA=Y apt-get -y install msodbcsql17 unixodbc-dev
 RUN pecl install sqlsrv
 RUN pecl install pdo_sqlsrv
-RUN printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini & \
-    printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.2/mods-available/pdo_sqlsrv.ini & \
-    cp /etc/php/7.2/mods-available/sqlsrv.ini /etc/php/7.2/cli/conf.d/10-sqlsrv.ini & \
+RUN printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini && \
+    printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.2/mods-available/pdo_sqlsrv.ini && \
+    cp /etc/php/7.2/mods-available/sqlsrv.ini /etc/php/7.2/cli/conf.d/10-sqlsrv.ini && \
     cp /etc/php/7.2/mods-available/pdo_sqlsrv.ini /etc/php/7.2/cli/conf.d/20-pdo_sqlsrv.ini
-#    sed -i "\$aextension=sqlsrv.so" /etc/php/7.2/mods-available/pdo.ini & \
-#    sed -i "\$aextension=pdo_sqlsrv.so" /etc/php/7.2/mods-available/pdo.ini & \
+#    sed -i "\$aextension=sqlsrv.so" /etc/php/7.2/mods-available/pdo.ini && \
+#    sed -i "\$aextension=pdo_sqlsrv.so" /etc/php/7.2/mods-available/pdo.ini && \
 #    cp  /etc/php/7.2/mods-available/pdo.ini /usr/share/php7.2-common/common/pdo.ini
 RUN phpenmod sqlsrv pdo_sqlsrv 
 
 # install composer
-RUN wget -O /usr/bin/composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar & \
+RUN wget -O /usr/bin/composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar && \
     echo "${COMPOSER_SHA1} */usr/bin/composer" | sha1sum -c - 
 RUN chmod +x /usr/bin/composer
 
 # install fusio
-RUN wget -O /var/www/html/fusio.zip "https://github.com/apioo/fusio/archive/${FUSIO_VERSION}.zip" & \
-    cd /var/www/html && unzip fusio.zip & \
-    cd /var/www/html && mv fusio-${FUSIO_VERSION} fusio & \
+RUN wget -O /var/www/html/fusio.zip "https://github.com/apioo/fusio/archive/${FUSIO_VERSION}.zip" && \
+    cd /var/www/html && unzip fusio.zip && \
+    cd /var/www/html && mv fusio-${FUSIO_VERSION} fusio && \
     cd /var/www/html/fusio && /usr/bin/composer install
 
 COPY ./fusio/resources /var/www/html/fusio/resources
@@ -69,20 +69,20 @@ COPY ./fusio/.fusio.yml /var/www/html/fusio/.fusio.yml
 COPY ./fusio/configuration.php /var/www/html/fusio/configuration.php
 COPY ./fusio/container.php /var/www/html/fusio/container.php
 #RUN chown -R www-data: /var/www/html/fusio
-RUN chown 777 /var/www/html/fusio & \
+RUN chown 777 /var/www/html/fusio && \
     chmod +x /var/www/html/fusio/bin/fusio
 
 # remove install file
-RUN rm /var/www/html/fusio/public/install.php & \
+RUN rm /var/www/html/fusio/public/install.php && \
     rm /var/www/html/fusio/public/.htaccess
 
 # apache config
 COPY ./etc/apache2/apache2.conf /etc/apache2/apache2.conf
 COPY ./etc/apache2/ports.conf /etc/apache2/ports.conf
 COPY ./etc/apache2/conf-available/other-vhosts-access-log.conf /etc/apache2/conf-available/other-vhosts-access-log.conf
-RUN touch /etc/apache2/sites-available/000-fusio.conf & \
-    chmod a+rwx /etc/apache2/sites-available/000-fusio.conf & \
-    mkdir -p /run/apache2/ & \
+RUN touch /etc/apache2/sites-available/000-fusio.conf && \
+    chmod a+rwx /etc/apache2/sites-available/000-fusio.conf && \
+    mkdir -p /run/apache2/ && \
     chmod a+rwx /run/apache2/
 
 # php config
@@ -91,22 +91,22 @@ COPY ./etc/php/99-custom.ini /etc/php/7.2/cli/conf.d/99-custom.ini
 
 
 # install additional connectors
-RUN cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-amqp & \
-    cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-beanstalk & \
-    cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-elasticsearch & \
-    cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-memcache & \
-    cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-mongodb & \
-    cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-redis & \
-    cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-smtp & \
+RUN cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-amqp && \
+    cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-beanstalk && \
+    cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-elasticsearch && \
+    cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-memcache && \
+    cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-mongodb && \
+    cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-redis && \
+    cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-smtp && \
     cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-soap
 
 # apache config
-RUN a2enmod rewrite & \
-    a2dissite 000-default & \
+RUN a2enmod rewrite && \
+    a2dissite 000-default && \
     a2ensite 000-fusio
 
 # install cron
-RUN touch /etc/cron.d/fusio & \
+RUN touch /etc/cron.d/fusio && \
     chmod a+rwx /etc/cron.d/fusio 
 
 # mount volumes
