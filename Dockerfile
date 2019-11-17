@@ -3,45 +3,43 @@ MAINTAINER Christoph Kappestein <christoph.kappestein@apioo.de>
 LABEL version="1.0"
 
 # env
-ENV FUSIO_PROJECT_KEY "42eec18ffdbffc9fda6110dcc705d6ce"
-ENV FUSIO_HOST "acme.com"
-ENV FUSIO_ENV "prod"
-ENV FUSIO_DB_NAME "fusio"
-ENV FUSIO_DB_USER "fusio"
-ENV FUSIO_DB_PW "61ad6c605975"
-ENV FUSIO_DB_HOST "localhost"
-
-ENV FUSIO_BACKEND_USER "demo"
-ENV FUSIO_BACKEND_EMAIL "demo@fusio-project.org"
-ENV FUSIO_BACKEND_PW "75dafcb12c4f"
-
-ENV PROVIDER_FACEBOOK_KEY ""
-ENV PROVIDER_FACEBOOK_SECRET ""
-ENV PROVIDER_GOOGLE_KEY ""
-ENV PROVIDER_GOOGLE_SECRET ""
-ENV PROVIDER_GITHUB_KEY ""
-ENV PROVIDER_GITHUB_SECRET ""
-ENV RECAPTCHA_KEY ""
-ENV RECAPTCHA_SECRET ""
-
-ENV FUSIO_MEMCACHE_HOST "localhost"
-ENV FUSIO_MEMCACHE_PORT "11211"
-
-ENV FUSIO_VERSION "master"
-
-ENV COMPOSER_VERSION "1.5.2"
-ENV COMPOSER_SHA1 "6dc307027b69892191dca036dcc64bb02dd74ab2"
+ENV FUSIO_PROJECT_KEY "42eec18ffdbffc9fda6110dcc705d6ce" \
+    FUSIO_HOST "acme.com" \
+    FUSIO_ENV "prod" \
+    FUSIO_DB_NAME "fusio" \
+    FUSIO_DB_USER "fusio" \
+    FUSIO_DB_PW "61ad6c605975" \
+    FUSIO_DB_HOST "localhost" \
+    FUSIO_BACKEND_USER "demo" \
+    FUSIO_BACKEND_EMAIL "demo@fusio-project.org" \
+    FUSIO_BACKEND_PW "75dafcb12c4f" \
+    PROVIDER_FACEBOOK_KEY "" \
+    PROVIDER_FACEBOOK_SECRET "" \
+    PROVIDER_GOOGLE_KEY "" \
+    PROVIDER_GOOGLE_SECRET "" \
+    PROVIDER_GITHUB_KEY "" \
+    PROVIDER_GITHUB_SECRET "" \
+    RECAPTCHA_KEY "" \
+    RECAPTCHA_SECRET "" \
+    FUSIO_MEMCACHE_HOST "localhost" \
+    FUSIO_MEMCACHE_PORT "11211" \
+    FUSIO_VERSION "master" \
+    COMPOSER_VERSION "1.5.2" \
+    COMPOSER_SHA1 "6dc307027b69892191dca036dcc64bb02dd74ab2"
 
 # install default packages
 RUN apt-get update -y 
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install curl wget git unzip apache2 memcached libapache2-mod-php7.2 php7.2 mysql-client php7.2-dev msodbcsql
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install curl wget git unzip apache2 memcached libapache2-mod-php7.2 php7.2 mysql-client php7.2-dev
 
 # install php7 extensions
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.2-mysql php7.2-pgsql php7.2-sqlite3 php7.2-simplexml php7.2-dom php7.2-bcmath php7.2-curl php7.2-zip php7.2-mbstring php7.2-intl php7.2-xml php7.2-curl php7.2-gd php7.2-soap php-memcached php-mongodb
 
 # install mysql drivers
-
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - & \
+    curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list > /etc/apt/sources.list.d/mssql-release.list & \
+    apt-get update & \
+    ACCEPT_EULA=Y apt-get install msodbcsql17
 RUN pecl install sqlsrv
 RUN pecl install pdo_sqlsrv
 RUN printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini & \
