@@ -6,6 +6,10 @@
 
 pushd /var/www/html/fusio
 
+# fix odbc for openshift
+export $(id)
+echo "default:x:$uid:0:user for openshift:/tmp:/bin/bash" >> /etc/passwd
+
 # install fusio
 php bin/fusio migration:up-to-date
 exitCode=$?
