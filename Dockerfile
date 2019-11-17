@@ -33,19 +33,19 @@ ENV COMPOSER_VERSION "1.5.2"
 ENV COMPOSER_SHA1 "6dc307027b69892191dca036dcc64bb02dd74ab2"
 
 # install default packages
-RUN apt install curl & \
-    curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - & \
-    curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list > /etc/apt/sources.list.d/mssql-release.list & \
-    apt-get update -y 
+RUN apt-get update -y 
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y install wget git unzip apache2 memcached libapache2-mod-php7.2 php7.2 mysql-client php-pear php7.2-dev
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install curl wget git unzip apache2 memcached libapache2-mod-php7.2 php7.2 mysql-client php-pear php7.2-dev
 
 # install php7 extensions
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.2-mysql php7.2-pgsql php7.2-sqlite3 php7.2-simplexml php7.2-dom php7.2-bcmath php7.2-curl php7.2-zip php7.2-mbstring php7.2-intl php7.2-xml php7.2-curl php7.2-gd php7.2-soap php-memcached php-mongodb
 
 # install mysql drivers
 
-RUN ACCEPT_EULA=Y apt-get install msodbcsql17 & \    
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - & \
+    curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list > /etc/apt/sources.list.d/mssql-release.list & \
+    apt-get update -y & \
+    ACCEPT_EULA=Y apt-get install msodbcsql17 & \   
     pecl install sqlsrv & \
     pecl install pdo_sqlsrv & \
     printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini & \
