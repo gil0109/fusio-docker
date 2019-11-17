@@ -3,29 +3,29 @@ MAINTAINER Christoph Kappestein <christoph.kappestein@apioo.de>
 LABEL version="1.0"
 
 # env
-ENV FUSIO_PROJECT_KEY "42eec18ffdbffc9fda6110dcc705d6ce" \
-    FUSIO_HOST "acme.com" \
-    FUSIO_ENV "prod" \
-    FUSIO_DB_NAME "fusio" \
-    FUSIO_DB_USER "fusio" \
-    FUSIO_DB_PW "61ad6c605975" \
-    FUSIO_DB_HOST "localhost" \
-    FUSIO_BACKEND_USER "demo" \
-    FUSIO_BACKEND_EMAIL "demo@fusio-project.org" \
-    FUSIO_BACKEND_PW "75dafcb12c4f" \
-    PROVIDER_FACEBOOK_KEY "" \
-    PROVIDER_FACEBOOK_SECRET "" \
-    PROVIDER_GOOGLE_KEY "" \
-    PROVIDER_GOOGLE_SECRET "" \
-    PROVIDER_GITHUB_KEY "" \
-    PROVIDER_GITHUB_SECRET "" \
-    RECAPTCHA_KEY "" \
-    RECAPTCHA_SECRET "" \
-    FUSIO_MEMCACHE_HOST "localhost" \
-    FUSIO_MEMCACHE_PORT "11211" \
-    FUSIO_VERSION "master" \
-    COMPOSER_VERSION "1.5.2" \
-    COMPOSER_SHA1 "6dc307027b69892191dca036dcc64bb02dd74ab2"
+ENV FUSIO_PROJECT_KEY="42eec18ffdbffc9fda6110dcc705d6ce" \
+    FUSIO_HOST="acme.com" \
+    FUSIO_ENV="prod" \
+    FUSIO_DB_NAME="fusio" \
+    FUSIO_DB_USER="fusio" \
+    FUSIO_DB_PW="61ad6c605975" \
+    FUSIO_DB_HOST="localhost" \
+    FUSIO_BACKEND_USER="demo" \
+    FUSIO_BACKEND_EMAIL="demo@fusio-project.org" \
+    FUSIO_BACKEND_PW="75dafcb12c4f" \
+    PROVIDER_FACEBOOK_KEY="" \
+    PROVIDER_FACEBOOK_SECRET="" \
+    PROVIDER_GOOGLE_KEY="" \
+    PROVIDER_GOOGLE_SECRET="" \
+    PROVIDER_GITHUB_KEY="" \
+    PROVIDER_GITHUB_SECRET="" \
+    RECAPTCHA_KEY="" \
+    RECAPTCHA_SECRET="" \
+    FUSIO_MEMCACHE_HOST="localhost" \
+    FUSIO_MEMCACHE_PORT="11211" \
+    FUSIO_VERSION="master" \
+    COMPOSER_VERSION="1.5.2" \
+    COMPOSER_SHA1="6dc307027b69892191dca036dcc64bb02dd74ab2"
 
 # install default packages
 RUN apt-get update -y 
