@@ -46,9 +46,6 @@ RUN pecl install sqlsrv && \
     printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini && \
     printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.2/mods-available/pdo_sqlsrv.ini && \
     ACCEPT_EULA=Y apt-get install mssql-tools && \
-    echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile && \
-    echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc && \
-    source ~/.bashrc && \
     sudo apt-get install unixodbc-dev && \
     #   cp /etc/php/7.2/mods-available/sqlsrv.ini /etc/php/7.2/cli/conf.d/10-sqlsrv.ini && \
     #   cp /etc/php/7.2/mods-available/pdo_sqlsrv.ini /etc/php/7.2/cli/conf.d/20-pdo_sqlsrv.ini
