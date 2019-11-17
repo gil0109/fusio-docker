@@ -42,10 +42,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.2-mysql php7.2-pgsql 
 
 # install mysql drivers
 
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - & \
-    curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list > /etc/apt/sources.list.d/mssql-release.list & \
-    apt-get update -y & \
-    ACCEPT_EULA=Y apt-get install msodbcsql17 & \   
+RUN apt-get install msodbcsql=13.1.9.2-1 & \
+    # curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - & \
+    # curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list > /etc/apt/sources.list.d/mssql-release.list & \
+    # apt-get update -y & \
+    #    ACCEPT_EULA=Y apt-get install msodbcsql17 & \   
     pecl install sqlsrv & \
     pecl install pdo_sqlsrv & \
     printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini & \
