@@ -33,8 +33,9 @@ ENV COMPOSER_VERSION "1.5.2"
 ENV COMPOSER_SHA1 "6dc307027b69892191dca036dcc64bb02dd74ab2"
 
 # install default packages
-RUN apt-get update -y
-
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - & \
+    curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list > /etc/apt/sources.list.d/mssql-release.list & \
+    apt-get update -y 
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get -y install wget git unzip apache2 memcached libapache2-mod-php7.2 php7.2 mysql-client php-pear php7.2-dev
 
@@ -43,7 +44,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install php7.2-mysql php7.2-pgsql 
 
 # install mysql drivers
 
-RUN pecl install sqlsrv & \
+RUN ACCEPT_EULA=Y apt-get install msodbcsql17 & \    
+    pecl install sqlsrv & \
     pecl install pdo_sqlsrv & \
     printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini & \
     printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.2/mods-available/pdo_sqlsrv.ini & \
