@@ -47,8 +47,7 @@ RUN pecl install sqlsrv & \
     pecl install pdo_sqlsrv & \
     printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php/7.2/mods-available/sqlsrv.ini & \
     printf "; priority=30\nextension=pdo_sqlsrv.so\n" > /etc/php/7.2/mods-available/pdo_sqlsrv.ini & \
-    phpenmod -v 7.2 sqlsrv pdo_sqlsrv & \
-    sed -i "\$aextension=pdo_sqlsrv.so" pdo.ini
+    phpenmod -v 7.2 sqlsrv pdo_sqlsrv 
 
 # install composer
 RUN wget -O /usr/bin/composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
@@ -87,6 +86,7 @@ RUN chmod a+rwx /run/apache2/
 COPY ./etc/php/99-custom.ini /etc/php/7.2/apache2/conf.d/99-custom.ini
 COPY ./etc/php/99-custom.ini /etc/php/7.2/cli/conf.d/99-custom.ini
 
+
 # install additional connectors
 RUN cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-amqp
 RUN cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-beanstalk
@@ -101,10 +101,11 @@ RUN cd /var/www/html/fusio && /usr/bin/composer require fusio/adapter-soap
 RUN a2enmod rewrite
 RUN a2dissite 000-default
 RUN a2ensite 000-fusio
+RUN sed -i "\$aextension=pdo_sqlsrv.so" pdo.ini
 
 # install cron
 RUN touch /etc/cron.d/fusio
-RUN chmod a+rwx /etc/cron.d/fusio
+RUN chmod a+rwx /etc/cron.d/fusio 
 
 # mount volumes
 VOLUME /var/www/html/fusio/cache
