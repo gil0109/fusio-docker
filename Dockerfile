@@ -23,7 +23,7 @@ ENV FUSIO_PROJECT_KEY="42eec18ffdbffc9fda6110dcc705d6ce" \
     RECAPTCHA_SECRET="" \
     FUSIO_MEMCACHE_HOST="localhost" \
     FUSIO_MEMCACHE_PORT="11211" \
-    FUSIO_VERSION="master" \
+    FUSIO_VERSION="1.8.0" \
     COMPOSER_VERSION="1.5.2" \
     COMPOSER_SHA1="6dc307027b69892191dca036dcc64bb02dd74ab2"
 
@@ -61,7 +61,7 @@ RUN wget -O /usr/bin/composer https://getcomposer.org/download/${COMPOSER_VERSIO
 RUN chmod +x /usr/bin/composer
 
 # install fusio
-RUN wget -O /var/www/html/fusio.zip "https://github.com/apioo/fusio/archive/${FUSIO_VERSION}.zip" && \
+RUN wget -O /var/www/html/fusio.zip "https://github.com/apioo/fusio/releases/download/v${FUSIO_VERSION}/fusio_${FUSIO_VERSION}.zip" && \
     cd /var/www/html && unzip fusio.zip && \
     cd /var/www/html && mv fusio-${FUSIO_VERSION} fusio && \
     cd /var/www/html/fusio && /usr/bin/composer install
