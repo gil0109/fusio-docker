@@ -60,10 +60,15 @@ RUN wget -O /usr/bin/composer https://getcomposer.org/download/${COMPOSER_VERSIO
     echo "${COMPOSER_SHA1} */usr/bin/composer" | sha1sum -c - 
 RUN chmod +x /usr/bin/composer
 
+
+
+
 # install fusio
+# RUN wget -O /var/www/html/fusio.zip "https://github.com/apioo/fusio/archive/${FUSIO_VERSION}.zip"
+
 RUN wget -O /var/www/html/fusio.zip "https://github.com/apioo/fusio/releases/download/v${FUSIO_VERSION}/fusio_${FUSIO_VERSION}.zip" && \
-    cd /var/www/html && unzip fusio.zip && \
-    cd /var/www/html && mv fusio-${FUSIO_VERSION} fusio && \
+    cd /var/www/html && unzip fusio.zip -d fusio && \
+    #cd /var/www/html && mv fusio-${FUSIO_VERSION} fusio && \
     cd /var/www/html/fusio && /usr/bin/composer install
 
 COPY ./fusio/resources /var/www/html/fusio/resources
